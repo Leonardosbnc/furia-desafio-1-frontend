@@ -40,6 +40,7 @@ export default function RegisterForm() {
       onSubmit={handleSubmit}
       helperText="Ir para login"
       onHelperClick={() => (window.location.href = "/")}
+      submitText="Salvar"
     />
   );
 }

@@ -4,7 +4,13 @@ import { useState } from "react";
 import FormField from "./FormField";
 import Button from "./Button";
 
-export default function Form({ fields, onSubmit, helperText, onHelperClick }) {
+export default function Form({
+  fields,
+  onSubmit,
+  helperText,
+  onHelperClick,
+  submitText,
+}) {
   const [data, setData] = useState({});
 
   return (
@@ -30,7 +36,7 @@ export default function Form({ fields, onSubmit, helperText, onHelperClick }) {
           </span>
         </div>
       )}
-      <Button onClick={() => onSubmit(data)}>Register</Button>
+      <Button onClick={() => onSubmit(data)}>{submitText}</Button>
     </div>
   );
 }
