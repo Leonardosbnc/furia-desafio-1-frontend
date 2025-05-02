@@ -5,7 +5,7 @@ import Form from "./Form";
 
 const fields = [
   { key: "username", label: "Username" },
-  { key: "password", label: "Senha" },
+  { key: "password", label: "Senha", type: "password" },
 ];
 
 export default function LoginForm() {

@@ -20,6 +20,7 @@ export default function Form({
           <FormField
             key={field.key}
             label={field.label}
+            type={field.type}
             setValue={(v) => setData((prev) => ({ ...prev, [field.key]: v }))}
             value={data[field.key] || ""}
           />

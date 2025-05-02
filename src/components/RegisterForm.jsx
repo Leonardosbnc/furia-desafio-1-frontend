@@ -5,8 +5,8 @@ import Form from "./Form";
 
 const fields = [
   { key: "username", label: "Username" },
-  { key: "password", label: "Senha" },
-  { key: "confirmPassword", label: "Confirmar Senha" },
+  { key: "password", label: "Senha", type: "password" },
+  { key: "confirmPassword", label: "Confirmar Senha", type: "password" },
 ];
 
 export default function RegisterForm() {
