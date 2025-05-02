@@ -21,6 +21,8 @@ export default function LoginForm() {
 
       if (res.ok) {
         alert("Logged in");
+        const { access_token } = await res.json();
+        localStorage.setItem("authToken", access_token);
         window.location.href = "/chat";
         return;
       }
