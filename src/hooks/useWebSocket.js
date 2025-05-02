@@ -2,20 +2,20 @@ import { useEffect, useRef, useState } from "react";
 
 export function useWebSocket(url, onMessage) {
   const socketRef = useRef(null);
-  const [connecting, setIsConnecting] = useState(true);
+  const [hasError, setHasError] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
     const baseUrl = process.env.NEXT_PUBLIC_WSS_SERVER_URL;
     const authToken = localStorage.getItem("authToken");
-    const finalUrl = `${baseUrl}/${url}${
-      authToken ? "?token=" + authToken : ""
-    }`;
+    if (!authToken) {
+      return;
+    }
+    const finalUrl = `${baseUrl}/${url}?token=${authToken}`;
     const socket = new WebSocket(finalUrl);
     socketRef.current = socket;
 
     socket.onopen = () => {
-      setIsConnecting(false);
       setIsConnected(true);
       console.log("WebSocket connected");
     };
@@ -34,7 +34,7 @@ export function useWebSocket(url, onMessage) {
     };
 
     socket.onerror = (error) => {
-      setIsConnecting(false);
+      setHasError(true);
       setIsConnected(false);
       console.error("WebSocket error:", error);
     };
@@ -52,5 +52,5 @@ export function useWebSocket(url, onMessage) {
     }
   };
 
-  return { sendMessage, isConnected, connecting };
+  return { sendMessage, isConnected, hasError };
 }

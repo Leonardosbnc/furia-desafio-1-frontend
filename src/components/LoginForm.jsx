@@ -2,6 +2,8 @@
 
 import { API_URL } from "@/consts";
 import Form from "./Form";
+import { useRouter } from "next/navigation";
+import { showToast } from "@/toast-helper";
 
 const fields = [
   { key: "username", label: "Username" },
@@ -9,6 +11,8 @@ const fields = [
 ];
 
 export default function LoginForm() {
+  const router = useRouter();
+
   const handleSubmit = async (data) => {
     try {
       const formData = new FormData();
@@ -20,16 +24,23 @@ export default function LoginForm() {
       });
 
       if (res.ok) {
-        alert("Login realizado!");
+        showToast("success", "Login realizado!");
         const { access_token } = await res.json();
         localStorage.setItem("authToken", access_token);
-        window.location.href = "/chat";
+        router.push("/chat");
+
         return;
       }
 
-      alert("Erro no login, verifique as credenciais e tente novamente.");
+      showToast(
+        "error",
+        "Erro no login, verifique as credenciais e tente novamente."
+      );
     } catch {
-      alert("Erro no login, verifique as credenciais e tente novamente.");
+      showToast(
+        "error",
+        "Erro no login, verifique as credenciais e tente novamente."
+      );
     }
   };
 
@@ -40,7 +51,7 @@ export default function LoginForm() {
         onSubmit={handleSubmit}
         helperText="Criar conta"
         submitText="Login"
-        onHelperClick={() => (window.location.href = "/register")}
+        onHelperClick={() => router.push("/register")}
       />
     </div>
   );

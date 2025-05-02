@@ -2,6 +2,8 @@
 
 import { API_URL } from "@/consts";
 import Form from "./Form";
+import { useRouter } from "next/navigation";
+import { showToast } from "@/toast-helper";
 
 const fields = [
   { key: "username", label: "Username" },
@@ -10,13 +12,15 @@ const fields = [
 ];
 
 export default function RegisterForm() {
+  const router = useRouter();
+
   const handleSubmit = async (data) => {
     if (!data.username?.trim() || !data.password?.trim()) {
-      alert("Username e Senha são obrigatórios");
+      showToast("error", "Username e Senha são obrigatórios");
       return;
     }
     if (data.password?.trim() !== data.confirmPassword?.trim()) {
-      alert("As senha devem ser iguais");
+      showToast("error", "As senha devem ser iguais");
       return;
     }
 
@@ -28,16 +32,20 @@ export default function RegisterForm() {
       });
 
       if (res.ok) {
-        alert("Conta criada");
-        window.location.href = "/";
+        showToast("success", "Conta criada");
+        router.push("/");
         return;
       }
       const { detail } = await res.json();
-      alert(
+      showToast(
+        "error",
         detail || "Erro na criação, verifique as informações e tente novamente"
       );
     } catch {
-      alert("Erro na criação, verifique as informações e tente novamente");
+      showToast(
+        "error",
+        "Erro na criação, verifique as informações e tente novamente"
+      );
     }
   };
 
@@ -46,7 +54,7 @@ export default function RegisterForm() {
       fields={fields}
       onSubmit={handleSubmit}
       helperText="Ir para login"
-      onHelperClick={() => (window.location.href = "/")}
+      onHelperClick={() => router.push("/")}
       submitText="Salvar"
     />
   );

@@ -1,6 +1,7 @@
 "use client";
 
 import { useWebSocket } from "@/hooks/useWebSocket";
+import { showToast } from "@/toast-helper";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 
@@ -11,7 +12,7 @@ export default function ChatPage() {
 
   const scrollableRef = useRef(null);
 
-  const { sendMessage, connecting, isConnected } = useWebSocket(
+  const { sendMessage, hasError, isConnected } = useWebSocket(
     "ws/chat",
     (msg) => {
       setMessages((prev) => [...prev, { sender: "bot", message: msg }]);
@@ -20,7 +21,7 @@ export default function ChatPage() {
   );
 
   const handleSendMessage = async () => {
-    if (!isConnected || connecting || loadingAnswer || message.length === 0) {
+    if (!isConnected || hasError || loadingAnswer || message.length === 0) {
       return;
     }
 
@@ -45,15 +46,10 @@ export default function ChatPage() {
   useEffect(() => {
     const token = localStorage.getItem("authToken");
     if (!token) {
+      showToast("error", "Algo deu errado. Tente novamente mais tarde");
       window.location.href = "/";
     }
   }, []);
-
-  useEffect(() => {
-    if (!isConnected && !connecting) {
-      alert("Algo deu errado. Tente novamente mais tarde");
-    }
-  }, [isConnected, connecting]);
 
   return (
     <div className="flex flex-col h-screen justify-center items-center">
@@ -107,7 +103,7 @@ export default function ChatPage() {
           }`}
           onClick={handleSendMessage}
           disabled={
-            !isConnected || connecting || loadingAnswer || message.length === 0
+            !isConnected || hasError || loadingAnswer || message.length === 0
           }
         >
           <Image src="send.svg" alt="send message" height={24} width={24} />
