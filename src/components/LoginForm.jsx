@@ -5,7 +5,7 @@ import Form from "./Form";
 
 const fields = [
   { key: "username", label: "Username" },
-  { key: "password", label: "Password" },
+  { key: "password", label: "Senha" },
 ];
 
 export default function LoginForm() {
@@ -20,20 +20,16 @@ export default function LoginForm() {
       });
 
       if (res.ok) {
-        alert("Logged in");
+        alert("Login realizado!");
         const { access_token } = await res.json();
         localStorage.setItem("authToken", access_token);
         window.location.href = "/chat";
         return;
       }
 
-      alert(
-        "Error trying to login, please check username and password and try again"
-      );
+      alert("Erro no login, verifique as credenciais e tente novamente.");
     } catch {
-      alert(
-        "Error trying to login, please check username and password and try again"
-      );
+      alert("Erro no login, verifique as credenciais e tente novamente.");
     }
   };
 

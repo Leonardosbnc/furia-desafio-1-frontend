@@ -5,12 +5,21 @@ import Form from "./Form";
 
 const fields = [
   { key: "username", label: "Username" },
-  { key: "password", label: "Password" },
-  { key: "confirmPassword", label: "Confirm Password" },
+  { key: "password", label: "Senha" },
+  { key: "confirmPassword", label: "Confirmar Senha" },
 ];
 
 export default function RegisterForm() {
   const handleSubmit = async (data) => {
+    if (!data.username?.trim() || !data.password?.trim()) {
+      alert("Username e Senha são obrigatórios");
+      return;
+    }
+    if (data.password?.trim() !== data.confirmPassword?.trim()) {
+      alert("As senha devem ser iguais");
+      return;
+    }
+
     try {
       const res = await fetch(`${API_URL}/user`, {
         method: "POST",
@@ -19,18 +28,16 @@ export default function RegisterForm() {
       });
 
       if (res.ok) {
-        alert("Account created");
+        alert("Conta criada");
         window.location.href = "/";
         return;
       }
-
+      const { detail } = await res.json();
       alert(
-        "Error creating account, please check username and password and try again"
+        detail || "Erro na criação, verifique as informações e tente novamente"
       );
     } catch {
-      alert(
-        "Error creating account, please check username and password and try again"
-      );
+      alert("Erro na criação, verifique as informações e tente novamente");
     }
   };
 
